@@ -1,0 +1,190 @@
+package com.example.project.entities;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
+import java.util.List;
+
+// ==========================================
+// 1. AUTHOR ENTITY
+// ==========================================
+@Entity
+class Author {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "biography")
+    private String biography;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Book> books;
+
+    // Kural 4: Tüm değişkenleri initialize eden Constructor
+    public Author(String name, String biography, List<Book> books) {
+        this.name = name;
+        this.biography = biography;
+        this.books = books;
+    }
+
+    // JPA için boş constructor
+    public Author() {}
+
+    // Kural 5: Getter & Setter (id için setter yok)
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+}
+
+// ==========================================
+// 2. PUBLISHER ENTITY
+// ==========================================
+@Entity
+class Publisher {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "address")
+    private String address;
+
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL)
+    private List<Book> books;
+
+    // Kural 4: Tüm değişkenleri initialize eden Constructor
+    public Publisher(String name, String address, List<Book> books) {
+        this.name = name;
+        this.address = address;
+        this.books = books;
+    }
+
+    // JPA için boş constructor
+    public Publisher() {}
+
+    // Kural 5: Getter & Setter (id için setter yok)
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+}
+
+// ==========================================
+// 3. BOOK ENTITY (Merkezi Sınıf - Public)
+// ==========================================
+@Entity
+public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "isbn", unique = true)
+    private String isbn;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private Author author;
+
+    @ManyToOne
+    @JoinColumn(name = "publisher_id", nullable = false)
+    private Publisher publisher;
+
+    // Kural 4: Tüm değişkenleri initialize eden Constructor
+    public Book(String title, String isbn, Author author, Publisher publisher) {
+        this.title = title;
+        this.isbn = isbn;
+        this.author = author;
+        this.publisher = publisher;
+    }
+
+    // JPA için boş constructor
+    public Book() {}
+
+    // Kural 5: Getter & Setter (id için setter yok)
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+git add .
+git commit -m "feat: implement data model inside single file"
+git push origin main
